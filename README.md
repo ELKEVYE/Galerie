@@ -37,3 +37,5 @@ Variables d'environnement backend conseillees sur Render :
 - `SECRET_KEY` : une valeur secrete longue.
 - `DEBUG` : `False`.
 - `ALLOWED_HOSTS` : le domaine Render du backend, par exemple `mon-api.onrender.com`.
+- `DATABASE_URL` : l'URL PostgreSQL fournie par Render.
+- `FRONTEND_URL` : l'URL publique du frontend React, par exemple `https://mon-site.onrender.com`.
