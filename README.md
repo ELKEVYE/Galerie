@@ -29,5 +29,11 @@ En developpement, Vite redirige `/api` et `/media` vers `http://127.0.0.1:8000`.
 
 Pour deployer separement :
 
-- backend : pointer la plateforme vers le dossier `backend/`, installer `backend/requirements.txt`, puis lancer les commandes Django depuis ce dossier.
+- backend : pointer la plateforme vers le dossier `backend/`, installer `requirements.txt`, puis utiliser `gunicorn config.wsgi:application` comme start command.
 - frontend : pointer la plateforme vers le dossier `frontend/`, definir `VITE_API_BASE_URL` avec l'URL publique du backend, puis executer `npm run build`.
+
+Variables d'environnement backend conseillees sur Render :
+
+- `SECRET_KEY` : une valeur secrete longue.
+- `DEBUG` : `False`.
+- `ALLOWED_HOSTS` : le domaine Render du backend, par exemple `mon-api.onrender.com`.
