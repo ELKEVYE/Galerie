@@ -7,9 +7,27 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+def env_bool(name, default=False):
+    value = os.environ.get(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def env_list(name, default=""):
+    value = os.environ.get(name, default)
+    return [item.strip() for item in value.split(",") if item.strip()]
+
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
-DEBUG = os.environ.get("DEBUG", "True") == "True"
-ALLOWED_HOSTS = ["*"]
+DEBUG = env_bool("DEBUG", default=True)
+
+default_allowed_hosts = ["127.0.0.1", "localhost"]
+render_external_hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+if render_external_hostname:
+    default_allowed_hosts.append(render_external_hostname)
+
+ALLOWED_HOSTS = env_list("ALLOWED_HOSTS", ",".join(default_allowed_hosts))
 
 
 INSTALLED_APPS = [
@@ -71,17 +89,17 @@ DATABASES = {
     }
 }
 
-CORS_ALLOWED_ORIGINS = [
-    origin.strip()
-    for origin in os.environ.get("FRONTEND_URL", "http://localhost:5173").split(",")
-    if origin.strip()
-]
-
-CSRF_TRUSTED_ORIGINS = [
-    origin.strip()
-    for origin in os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(",")
-    if origin.strip()
-]
+frontend_origins = env_list("FRONTEND_URL", "http://localhost:5173")
+CORS_ALLOWED_ORIGINS = env_list(
+    "CORS_ALLOWED_ORIGINS",
+    ",".join(frontend_origins),
+)
+CSRF_TRUSTED_ORIGINS = env_list(
+    "CSRF_TRUSTED_ORIGINS",
+    ",".join(frontend_origins),
+)
+CORS_ALLOW_CREDENTIALS = True
+SERVE_MEDIA = env_bool("SERVE_MEDIA", default=DEBUG)
 
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")

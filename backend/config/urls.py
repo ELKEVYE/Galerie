@@ -11,5 +11,5 @@ urlpatterns = [
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh_root"),
 ]
 
-if settings.DEBUG:
+if settings.SERVE_MEDIA:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
