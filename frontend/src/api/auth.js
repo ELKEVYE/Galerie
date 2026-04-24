@@ -1,4 +1,9 @@
-import { apiClient, publicClient, setAccessToken } from "./client";
+import {
+  apiClient,
+  publicClient,
+  setAccessToken,
+  setRefreshToken,
+} from "./client";
 
 export async function registerUser(payload) {
   const response = await publicClient.post("/auth/register/", payload);
@@ -7,6 +12,12 @@ export async function registerUser(payload) {
 
 export async function loginUser(payload) {
   const response = await publicClient.post("/auth/login/", payload);
+
+  const { access, refresh } = response.data;
+
+  setAccessToken(access);
+  setRefreshToken(refresh);
+
   return response.data;
 }
 
