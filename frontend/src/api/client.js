@@ -1,10 +1,16 @@
 import axios from "axios";
 
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, "");
 const API_BASE_URL = import.meta.env.DEV
   ? "/api"
-  : `${API_URL}/api`;
+  : API_URL
+    ? `${API_URL}/api`
+    : "/api";
+
+if (!import.meta.env.DEV && !API_URL) {
+  console.warn("VITE_API_URL is not defined. Falling back to same-origin /api.");
+}
 
 const ACCESS_TOKEN_KEY = "accessToken";
 const REFRESH_TOKEN_KEY = "refreshToken";
