@@ -105,7 +105,15 @@ export function AuthProvider({ children }) {
       setUser(data.user);
       return data;
     } catch (loginError) {
-      const message = normalizeBackendError(loginError);
+      console.error("LOGIN ERROR:", loginError);
+      console.error("LOGIN RESPONSE:", loginError?.response?.data);
+
+      const message =
+        loginError?.response?.data?.detail ||
+        loginError?.response?.data?.non_field_errors?.[0] ||
+        loginError?.message ||
+        normalizeBackendError(loginError);
+
       setError(message);
       throw new Error(message);
     } finally {

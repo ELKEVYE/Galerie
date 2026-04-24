@@ -13,10 +13,15 @@ export async function registerUser(payload) {
 export async function loginUser(payload) {
   const response = await publicClient.post("/auth/login/", payload);
 
+  console.log("LOGIN RESPONSE =", response.data);
+
   const { access, refresh } = response.data;
 
   setAccessToken(access);
   setRefreshToken(refresh);
+
+  console.log("ACCESS TOKEN =", localStorage.getItem("accessToken"));
+  console.log("REFRESH TOKEN =", localStorage.getItem("refreshToken"));
 
   return response.data;
 }
