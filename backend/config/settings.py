@@ -22,7 +22,7 @@ def env_list(name, default=""):
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
 DEBUG = env_bool("DEBUG", default=True)
 
-default_allowed_hosts = ["127.0.0.1", "localhost"]
+default_allowed_hosts = ["127.0.0.1", "localhost", ".onrender.com"]
 render_external_hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 if render_external_hostname:
     default_allowed_hosts.append(render_external_hostname)
