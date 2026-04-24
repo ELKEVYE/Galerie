@@ -22,12 +22,14 @@ def env_list(name, default=""):
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
 DEBUG = env_bool("DEBUG", default=True)
 
-default_allowed_hosts = ["127.0.0.1", "localhost", ".onrender.com"]
-render_external_hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
-if render_external_hostname:
-    default_allowed_hosts.append(render_external_hostname)
-
-ALLOWED_HOSTS = env_list("ALLOWED_HOSTS", ",".join(default_allowed_hosts))
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get(
+        "ALLOWED_HOSTS",
+        "galerie-p5x3.onrender.com,.onrender.com,localhost,127.0.0.1",
+    ).split(",")
+    if host.strip()
+]
 
 
 INSTALLED_APPS = [
@@ -94,10 +96,14 @@ CORS_ALLOWED_ORIGINS = env_list(
     "CORS_ALLOWED_ORIGINS",
     ",".join(frontend_origins),
 )
-CSRF_TRUSTED_ORIGINS = env_list(
-    "CSRF_TRUSTED_ORIGINS",
-    ",".join(frontend_origins),
-)
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get(
+        "CSRF_TRUSTED_ORIGINS",
+        "https://galerie-p5x3.onrender.com",
+    ).split(",")
+    if origin.strip()
+]
 CORS_ALLOW_CREDENTIALS = True
 SERVE_MEDIA = env_bool("SERVE_MEDIA", default=DEBUG)
 
