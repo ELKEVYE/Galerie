@@ -1,9 +1,10 @@
 import axios from "axios";
 
 
+const API_URL = import.meta.env.VITE_API_URL;
 const API_BASE_URL = import.meta.env.DEV
   ? "/api"
-  : `${import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000"}/api`;
+  : `${API_URL}/api`;
 
 const ACCESS_TOKEN_KEY = "accessToken";
 const REFRESH_TOKEN_KEY = "refreshToken";
