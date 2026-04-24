@@ -22,14 +22,7 @@ def env_list(name, default=""):
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
 DEBUG = env_bool("DEBUG", default=True)
 
-ALLOWED_HOSTS = [
-    host.strip()
-    for host in os.environ.get(
-        "ALLOWED_HOSTS",
-        "galerie-p5x3.onrender.com,.onrender.com,localhost,127.0.0.1",
-    ).split(",")
-    if host.strip()
-]
+ALLOWED_HOSTS = ["*"]
 
 
 INSTALLED_APPS = [
