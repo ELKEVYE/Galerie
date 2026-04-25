@@ -4,6 +4,8 @@ import { deletePhoto, fetchPhotos, updatePhoto, uploadPhotos } from "../api/auth
 import { useAuth } from "../hooks/useAuth";
 import "../styles/dashboard.css";
 
+const API_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, "");
+
 function createUploadEntry(file) {
   return {
     id: `${file.name}-${file.size}-${file.lastModified}`,
@@ -32,20 +34,19 @@ function getPhotoUrl(photo) {
     return "";
   }
 
+  if (rawUrl.startsWith("http://") || rawUrl.startsWith("https://")) {
+    return rawUrl;
+  }
+
   if (rawUrl.startsWith("/media/")) {
-    return rawUrl;
+    return `${API_URL}${rawUrl}`;
   }
 
-  try {
-    const parsedUrl = new URL(rawUrl);
-    if (parsedUrl.pathname.startsWith("/media/")) {
-      return `${parsedUrl.pathname}${parsedUrl.search}`;
-    }
-  } catch {
-    return rawUrl;
+  if (rawUrl.startsWith("media/")) {
+    return `${API_URL}/${rawUrl}`;
   }
 
-  return rawUrl;
+  return `${API_URL}/media/${rawUrl}`;
 }
 
 function buildPhotoFilename(photo) {
