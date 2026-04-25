@@ -1,5 +1,6 @@
 from typing import Any
 
+from django.conf import settings
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
@@ -91,29 +92,25 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class PhotoSerializer(serializers.ModelSerializer):
-    owner = UserSerializer(read_only=True)
     image_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Photo
-        fields = (
-            "id",
-            "image",
-            "image_url",
-            "description",
-            "date",
-            "owner",
-            "created_at",
-            "updated_at",
-        )
-        read_only_fields = ("id", "owner", "created_at", "updated_at")
+        fields = ["id", "image", "image_url", "description", "date"]
 
     def get_image_url(self, obj: Photo) -> str:
-        request = self.context.get("request")
         if not obj.image:
             return ""
+
+        backend_url = getattr(settings, "BACKEND_URL", "").rstrip("/")
+
+        if backend_url:
+            return f"{backend_url}{obj.image.url}"
+
+        request = self.context.get("request")
         if request is None:
             return obj.image.url
+
         return request.build_absolute_uri(obj.image.url)
 
 
