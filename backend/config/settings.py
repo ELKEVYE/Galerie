@@ -88,7 +88,11 @@ DATABASES = {
 
 frontend_origins = env_list(
     "FRONTEND_URL",
-    "http://localhost:5173,https://galerie-p5x3.onrender.com",
+    (
+        "http://localhost:5173,"
+        "https://galerie-p5x3.onrender.com,"
+        "https://galerie-dcm8krfq6-ebby-cheikhnas-projects.vercel.app"
+    ),
 )
 CORS_ALLOWED_ORIGINS = env_list(
     "CORS_ALLOWED_ORIGINS",
