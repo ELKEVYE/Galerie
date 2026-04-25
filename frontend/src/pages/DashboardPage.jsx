@@ -29,7 +29,8 @@ function normalizeText(value) {
 
 function getPhotoUrl(photo) {
   const rawUrl = photo.image_url || photo.image || "";
-
+  console.log("RAW IMAGE URL =", rawUrl);
+  console.log("VITE_API_URL =", API_URL);
   if (!rawUrl) {
     return "";
   }
