@@ -82,6 +82,10 @@ function DashboardPage() {
 
     try {
       const data = await fetchPhotos();
+
+      console.log("PHOTOS BACKEND =", data);
+      console.log("FIRST PHOTO URL =", data?.[0]?.image_url || data?.[0]?.image);
+
       setPhotos(data);
     } catch (error) {
       setPhotoError("Impossible de charger vos photos.");
