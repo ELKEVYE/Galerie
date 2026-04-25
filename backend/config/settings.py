@@ -86,7 +86,10 @@ DATABASES = {
     }
 }
 
-frontend_origins = env_list("FRONTEND_URL", "http://localhost:5173")
+frontend_origins = env_list(
+    "FRONTEND_URL",
+    "http://localhost:5173,https://galerie-p5x3.onrender.com",
+)
 CORS_ALLOWED_ORIGINS = env_list(
     "CORS_ALLOWED_ORIGINS",
     ",".join(frontend_origins),
@@ -107,7 +110,7 @@ if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-
+DEBUG
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
