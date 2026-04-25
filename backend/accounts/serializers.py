@@ -98,20 +98,37 @@ class PhotoSerializer(serializers.ModelSerializer):
         model = Photo
         fields = ["id", "image", "image_url", "description", "date"]
 
-    def get_image_url(self, obj: Photo) -> str:
-        if not obj.image:
+    def build_absolute_media_url(self, url: str) -> str:
+        if not url:
             return ""
+
+        if url.startswith("http://") or url.startswith("https://"):
+            return url
 
         backend_url = getattr(settings, "BACKEND_URL", "").rstrip("/")
 
         if backend_url:
-            return f"{backend_url}{obj.image.url}"
+            return f"{backend_url}{url}"
 
         request = self.context.get("request")
-        if request is None:
-            return obj.image.url
+        if request:
+            return request.build_absolute_uri(url)
 
-        return request.build_absolute_uri(obj.image.url)
+        return url
+
+    def get_image_url(self, obj: Photo) -> str:
+        if not obj.image:
+            return ""
+
+        return self.build_absolute_media_url(obj.image.url)
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        data["image"] = self.build_absolute_media_url(data.get("image", ""))
+        data["image_url"] = data.get("image_url") or data["image"]
+
+        return data
 
 
 class PhotoUploadSerializer(serializers.Serializer):
